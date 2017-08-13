@@ -20,8 +20,9 @@ var rootNotes = notes.slice(0, 20);
 var dimpleNotes = ['F♭', 'A♭', 'C', 'E', 'G♯']
 
 var layoutWidth = 300;
-var padding = 15;
-var verticalSpacing = 12;
+var padding = 17;
+var verticalSpacing = 25;
+var rowSpacing = 18;
 var numButtonsInRow = 6;
 
 var buttonWidth = (layoutWidth - (padding*(numButtonsInRow+1))) / numButtonsInRow;
@@ -35,7 +36,7 @@ var draw = SVG('drawing').size(layoutWidth, layoutHeight);
 for(var i=0; i<rootNotes.length; i++) {
   var rootNote = rootNotes[i];
   var rowSvg = drawRow(rootNote);
-  rowSvg.move(0, i*(buttonWidth+verticalSpacing));
+  rowSvg.move(0, i*(buttonWidth+rowSpacing)+2);
 }
 
 function drawRow(rootNote) {
@@ -49,34 +50,34 @@ function drawRow(rootNote) {
     rootNote,
     third
   ];
-  
+
   var rowSvg = draw.nested();
 
   for(var i=0; i<rowNotes.length; i++) {
     var circleX = padding*(i+1) + buttonWidth*i;
-    var circleY = verticalSpacing * (rowNotes.length - i); 
-    var button = rowSvg.circle(buttonWidth).move(circleX,circleY).attr('shape-rendering',"optimizeQuality");
-    
+    var circleY = verticalSpacing * (rowNotes.length - (i+1));
+    var button = rowSvg.circle(buttonWidth).move(circleX,circleY).attr('shape-rendering',"geometricPrecision");
+
     if(i==4) {
       button.fill('lightgray');
     } else {
       button.fill('none');
     }
-    
+
     if(i==4 && dimpleNotes.indexOf(rootNote) !== -1) {
       button.stroke({width:5, color: 'black'});
     } else {
       button.stroke({width:2, color: 'black'});
     }
-    
+
     rowSvg.text(rowNotes[i]).attr({
-      'font-weight': 'bold', 
-      x: circleX+(buttonWidth/2), 
+      'font-weight': 'bold',
+      x: circleX+(buttonWidth/2),
       y: circleY+3,
       'text-anchor': 'middle',
       'font-size': 14
     });
   }
-  
+
   return rowSvg;
 }
